@@ -9,29 +9,23 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# ============================================================
 # PROJECT PATHS / LOGO
-# ============================================================
 
 ROOT = Path(__file__).resolve().parent
-LOGO = ROOT / "runpulse_logo_bright.png"
+LOGO = ROOT / "starva_logo_bright.png"
 LOGO_DATA = base64.b64encode(LOGO.read_bytes()).decode("utf-8") if LOGO.exists() else ""
 
-# ============================================================
-# FITBIT HEALTH & FITNESS DATA ANALYTICS
+# STARVA FITNESS DATA ANALYTICS
 # Streamlit + SQLite + SQL + Plotly + Matplotlib + Seaborn
-# ============================================================
 
 st.set_page_config(
-    page_title="RunPulse Fitness Data Analytics",
+    page_title="Starva Fitness Data Analytics",
     page_icon=str(LOGO) if LOGO.exists() else "🏃",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ============================================================
 # THEME
-# ============================================================
 
 st.markdown(
     """
@@ -133,7 +127,7 @@ st.markdown(
     font-size:12px;
 }
 /* ============================================================
-   RUNPULSE PROJECT LOGO
+   STARVA PROJECT LOGO
    ============================================================ */
 .project-logo-card {
     display:flex;
@@ -181,9 +175,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ============================================================
 # DATABASE
-# ============================================================
 
 DB = ROOT / "fitbit_analytics.db"
 
@@ -208,9 +200,7 @@ hr = load_table("heart_rate_hourly_clean")
 weight = load_table("weight_clean")
 participants = load_table("participant_summary")
 
-# ============================================================
 # DATA TYPES / DERIVED COLUMNS
-# ============================================================
 
 for df, col in [
     (daily, "Date"),
@@ -257,9 +247,7 @@ WEEKDAYS = [
 ]
 WEEKDAY_ORDER = {day: i for i, day in enumerate(WEEKDAYS)}
 
-# ============================================================
 # HELPERS
-# ============================================================
 
 def fmt(value, decimals=0):
     if pd.isna(value):
@@ -317,16 +305,14 @@ def safe_mean(df, col):
 def sql_df(query):
     return pd.read_sql_query(query, get_connection())
 
-# ============================================================
 # SIDEBAR
-# ============================================================
 
 st.sidebar.markdown(
     f"""
     <div class="project-logo-card">
         <img class="project-logo-img" src="data:image/png;base64,{LOGO_DATA}" />
         <div>
-            <div class="project-logo-title">RunPulse</div>
+            <div class="project-logo-title">Starva</div>
             <div class="project-logo-sub">Fitness Data Analytics</div>
         </div>
     </div>
@@ -393,9 +379,7 @@ levels = st.sidebar.multiselect(
 
 rolling = st.sidebar.toggle("7-day rolling trend", True)
 
-# ============================================================
 # FILTER DATA
-# ============================================================
 
 fd = daily[
     daily["Date"].between(start, end)
@@ -432,9 +416,7 @@ fw = filtered_by_ids(weight, ids)
 if "DateOnly" in fw.columns:
     fw = fw[fw["DateOnly"].between(start, end)]
 
-# ============================================================
 # HEADER
-# ============================================================
 
 st.markdown(
     f"""
@@ -442,7 +424,7 @@ st.markdown(
         <div class="hero-brand">
             <img class="hero-logo-img" src="data:image/png;base64,{LOGO_DATA}" />
             <div>
-                <div class="brand-title">RunPulse Fitness Data Analytics</div>
+                <div class="brand-title">Starva Fitness Data Analytics</div>
                 <div class="brand-sub">
                     Interactive historical analysis of activity, calories, sleep,
                     heart rate and weight
@@ -455,9 +437,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ============================================================
 # OVERVIEW
-# ============================================================
 
 if page == "🏠 Overview":
 
@@ -634,9 +614,7 @@ if page == "🏠 Overview":
             unsafe_allow_html=True,
         )
 
-# ============================================================
 # ACTIVITY EXPLORER
-# ============================================================
 
 elif page == "🏃 Activity Explorer":
 
@@ -767,9 +745,7 @@ elif page == "🏃 Activity Explorer":
         hide_index=True,
     )
 
-# ============================================================
 # PARTICIPANT ANALYSIS
-# ============================================================
 
 elif page == "👥 Participant Analysis":
 
@@ -877,9 +853,7 @@ elif page == "👥 Participant Analysis":
         )
         show_plot(fig, 400)
 
-# ============================================================
 # INTENSITY & CALORIES
-# ============================================================
 
 elif page == "🔥 Intensity & Calories":
 
@@ -986,9 +960,7 @@ elif page == "🔥 Intensity & Calories":
         )
         show_plot(fig, 390)
 
-# ============================================================
 # SLEEP
-# ============================================================
 
 elif page == "😴 Sleep Analytics":
 
@@ -1107,9 +1079,7 @@ elif page == "😴 Sleep Analytics":
             hide_index=True,
         )
 
-# ============================================================
 # HEART RATE
-# ============================================================
 
 elif page == "❤️ Heart Rate":
 
@@ -1195,9 +1165,7 @@ elif page == "❤️ Heart Rate":
             )
             show_plot(fig, 350)
 
-# ============================================================
 # WEIGHT / BMI
-# ============================================================
 
 elif page == "⚖️ Weight & BMI":
 
@@ -1267,9 +1235,7 @@ elif page == "⚖️ Weight & BMI":
                 )
                 show_plot(fig, 360)
 
-# ============================================================
 # DATA QUALITY
-# ============================================================
 
 elif page == "🧹 Data Quality":
 
@@ -1397,9 +1363,7 @@ elif page == "🧹 Data Quality":
         """
     )
 
-# ============================================================
 # SQL INSIGHTS
-# ============================================================
 
 elif page == "🧠 SQL Insights":
 
@@ -1585,9 +1549,7 @@ LIMIT 20;
             except Exception as exc:
                 st.error(f"SQL Error: {exc}")
 
-# ============================================================
 # PYTHON EDA — MATPLOTLIB + SEABORN
-# ============================================================
 
 elif page == "📊 Python EDA":
 
@@ -1719,9 +1681,7 @@ elif page == "📊 Python EDA":
         st.pyplot(plt.gcf())
         plt.close()
 
-# ============================================================
 # INSIGHTS & RECOMMENDATIONS
-# ============================================================
 
 elif page == "💡 Insights & Recommendations":
 
@@ -1886,9 +1846,7 @@ elif page == "💡 Insights & Recommendations":
         hide_index=True,
     )
 
-# ============================================================
 # DATA EXPLORER
-# ============================================================
 
 elif page == "🔎 Data Explorer":
 
